@@ -1,3 +1,3 @@
-module github.com/guptarohit/asciigraph
+module github.com/chriskim06/asciigraph
 
-go 1.11
+go 1.18
