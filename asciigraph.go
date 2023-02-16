@@ -44,8 +44,14 @@ func PlotMany(data [][]float64, options ...Option) string {
 		if min < minimum {
 			minimum = min
 		}
+		if config.Min != nil && *config.Min < minimum {
+			minimum = *config.Min
+		}
 		if max > maximum {
 			maximum = max
+		}
+		if config.Max != nil && *config.Max > maximum {
+			maximum = *config.Max
 		}
 	}
 	interval := math.Abs(maximum - minimum)
@@ -62,14 +68,20 @@ func PlotMany(data [][]float64, options ...Option) string {
 		config.Offset = 3
 	}
 
+	var min2 float64
+	var max2 float64
 	var ratio float64
+	padding := 0.0 // if we set height to 10 but min and max are both 0, we need 10 units of padding
 	if interval != 0 {
 		ratio = float64(config.Height) / interval
 	} else {
 		ratio = 1
+		if config.Height > 0 {
+			padding = float64(config.Height)
+		}
 	}
-	min2 := round(minimum * ratio)
-	max2 := round(maximum * ratio)
+	min2 = round(minimum * ratio)
+	max2 = round((maximum + padding) * ratio)
 
 	intmin2 := int(min2)
 	intmax2 := int(max2)
